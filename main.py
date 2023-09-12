@@ -122,7 +122,6 @@ def request_pizza():
 
     db_read()
 
-
     size = input(f'\n What size of pizza do you want? S for Small, '
                  f'M for Medium, and L for Large >>> ').upper()
     if (size == 'S') or (size == 'M') or (size == 'L'):
