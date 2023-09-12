@@ -91,7 +91,7 @@ def db_write(size, extra_p, extra_c, amt, f_name):
         print("Saved all data to the DB successfully")
 
 
-def get_greeting():
+def get_greeting(first_name):
     from datetime import datetime
 
     # Get the current time
@@ -112,7 +112,9 @@ def get_greeting():
     else:
         greeting = "Good evening"
 
-    return greeting
+    # welcome message
+    print("-" * 80 + f"\n {greeting} {first_name}, Welcome to Python Pizza Deliveries \n" + "-" * 80)
+    # return greeting
 
 
 def request_pizza():
@@ -120,9 +122,7 @@ def request_pizza():
 
     db_read()
 
-    # welcome message
-    f_name = input("Please enter your first name: >>> ").title()
-    print("-" * 80 + f"\n {get_greeting()} {f_name}, Welcome to Python Pizza Deliveries \n" + "-" * 80)
+
     size = input(f'\n What size of pizza do you want? S for Small, '
                  f'M for Medium, and L for Large >>> ').upper()
     if (size == 'S') or (size == 'M') or (size == 'L'):
@@ -166,4 +166,15 @@ def request_pizza():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    request_pizza()
+    f_name = input("Please enter your first name: >>> ").title()
+    get_greeting(f_name)
+
+    pizza_count = input("How many pizzas do you want to order? >>> ")
+    try:
+        pizza_count = int(pizza_count)
+        while pizza_count > 0:
+            request_pizza()
+            pizza_count -= 1
+    except ValueError:
+        print("Input is not a number, exiting the application.")
+
