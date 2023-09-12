@@ -146,6 +146,7 @@ def request_pizza():
                 extra_p = 'No'
         else:
             print("Pepperoni have been skipped")
+            extra_p = 'No'
 
         extra_cheese = input("\nDo you want extra cheese? (Y/N) >>>  ").upper()
 
