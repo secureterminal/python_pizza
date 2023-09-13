@@ -28,7 +28,7 @@ prices = {
     'PML': 3,
     'C': 1
 }
-final_bill = 0
+final_bill = []
 
 
 def db_connect():
@@ -119,13 +119,12 @@ def get_greeting(first_name):
 
 def request_pizza():
     global final_bill, prices
-
-    db_read()
+    bill = 0
 
     size = input(f'\n What size of pizza do you want? S for Small, '
                  f'M for Medium, and L for Large >>> ').upper()
     if (size == 'S') or (size == 'M') or (size == 'L'):
-        final_bill += prices[size]
+        bill += prices[size]
 
         print("\n" + "-" * 8 + f"\n Extras \n" + "-" * 8)
 
@@ -135,10 +134,10 @@ def request_pizza():
             pepperoni_size = input("\nWhat size of extra pepperoni do you want? S for Small,"
                                    " L for medium/Large >>> ").upper()
             if pepperoni_size == "S":
-                final_bill += prices["PS"]
+                bill += prices["PS"]
                 extra_p = 'Small'
             elif pepperoni_size == "L":
-                final_bill += prices["PML"]
+                bill += prices["PML"]
                 extra_p = 'Large'
             else:
                 print("\nWrong input, extra pepperoni will be skipped\n")
@@ -150,30 +149,38 @@ def request_pizza():
         extra_cheese = input("\nDo you want extra cheese? (Y/N) >>>  ").upper()
 
         if extra_cheese == "Y":
-            final_bill += prices["C"]
+            bill += prices["C"]
             extra_c = 'Yes'
         else:
             print("\nExtra cheese have been skipped")
             extra_c = 'No'
 
-        print(f'\nYour final bill is ${final_bill}, thanks for your patronage!\n\n')
+        print(f'\nYour bill is ${bill}, thanks for your patronage!\n\n')
     else:
         print('\nWrong input, please try again!!!\n\n')
 
-    db_write(size, extra_p, extra_c, final_bill, f_name)
+    db_write(size, extra_p, extra_c, bill, f_name)
+    final_bill.append(bill)
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    db_read()
+    multiple_pizza = False
     f_name = input("Please enter your first name: >>> ").title()
     get_greeting(f_name)
 
     pizza_count = input("How many pizzas do you want to order? >>> ")
     try:
         pizza_count = int(pizza_count)
+        if pizza_count > 1:
+            multiple_pizza = True
         while pizza_count > 0:
             request_pizza()
             pizza_count -= 1
     except ValueError:
         print("Input is not a number, exiting the application.")
+
+    if multiple_pizza:
+        print(f"Your final bill is ${sum(final_bill)}, thanks for your patronage!")
 
